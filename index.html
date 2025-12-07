@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Camera + Overlay Auto Save</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
+        }
+    </script>
+
+</head>
+<body>
+    <div class="stage">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <!-- 固定パスの透過画像 -->
+        <div class="overlay"><img id="overlayImg" src="Output\cat_2\default\front.png" alt="overlay"></div>
+        <div class="toolbar">
+            <button id="capture"></button>
+        </div>
+    </div>
+
+    <!-- プレビュー選択UI -->
+    <div class="selector">
+        <img class="thumb" src="Output\cat_2\default\front.png" data-src="Output\cat_2\default\front.png" alt="thumb1">
+        <img class="thumb" src="Output\cat_9\default\front.png" data-src="Output\cat_9\default\front.png" alt="thumb2">
+        <img class="thumb" src="Output\cheer_1\default\front.png" data-src="Output\cheer_1\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\cheer_2\default\front.png" data-src="Output\cheer_2\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\cheer_3\default\front.png" data-src="Output\cheer_3\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\cheer_4\default\front.png" data-src="Output\cheer_4\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\cheer_5\default\front.png" data-src="Output\cheer_5\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\cheer_6\default\front.png" data-src="Output\cheer_6\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\jump_4\default\front.png" data-src="Output\jump_4\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\jump_5\default\front.png" data-src="Output\jump_5\default\front.png" alt="thumb3">
+        <img class="thumb" src="Output\piece_3\default\front.png" data-src="Output\piece_3\default\front.png" alt="thumb3">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
