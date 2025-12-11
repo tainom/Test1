@@ -1,0 +1,69 @@
+{
+  "pose": [
+    {
+      "name": "cat_2"
+    },
+    {
+      "name": "cat_9"
+    },
+    {
+      "name": "cheer_1"
+    },
+    {
+      "name": "cheer_2"
+    },
+    {
+      "name": "cheer_3"
+    },
+    {
+      "name": "cheer_4"
+    },
+    {
+      "name": "cheer_5"
+    },
+    {
+      "name": "cheer_6"
+    },
+    {
+      "name": "jump_4"
+    },
+    {
+      "name": "jump_5"
+    },
+    {
+      "name": "piece_3"
+    }
+  ],
+  "face": [
+    {
+      "name": "default"
+    },
+    {
+      "name": "highlightoff"
+    },
+    {
+      "name": "kirakira"
+    },
+    {
+      "name": "nagomi"
+    },
+    {
+      "name": "shyness"
+    },
+    {
+      "name": "smile"
+    },
+    {
+      "name": "stinking"
+    },
+    {
+      "name": "surprised"
+    },
+    {
+      "name": "tehepero"
+    },
+    {
+      "name": "wink"
+    }
+  ]
+}

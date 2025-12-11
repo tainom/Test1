@@ -1,0 +1,225 @@
+
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: sans-serif;
+}
+
+.stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+canvas {
+  display: block;
+  width: 100vw;   /* 画面幅に合わせる */
+  height: 100vh;  /* 画面高さに合わせる */
+  object-fit: cover; /* 縦横比を維持して拡大縮小 */
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.overlay img {
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+}
+
+.switch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+#switchMode {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007aff; /* iOS風ブルー */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: inline-block; /* 横長にするための基本指定 */
+    white-space: nowrap;   /* 改行させない */
+    transition: background-color 0.2s ease;
+}
+
+.toolbar {
+    position: fixed;            /* 画面に固定 */
+    bottom: 160px;               /* 下からの距離（余白調整） */
+    left: 50%;                  /* 横方向の基準を中央に */
+    transform: translateX(-50%);/* 中央寄せ */
+    z-index: 1000;              /* 画像より前面に表示 */
+}
+
+/* サムネイル最小化時は下に表示 */
+#capture.minimized {
+    position: fixed;            /* 画面に固定 */
+    bottom: -140px;               /* 下からの距離（余白調整） */
+    left: 50%;                  /* 横方向の基準を中央に */
+    transform: translateX(-50%);/* 中央寄せ */
+    z-index: 1000;              /* 画像より前面に表示 */
+}
+
+.toolbar button {
+    width: 80px;               /* 外側リングの直径 */
+    height: 80px;
+    border-radius: 50%;        /* 円形 */
+    border: 4px solid #ccc;    /* 外側リングの枠 */
+    background: #000;          /* 外側リングの背景（黒） */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toolbar button::before {
+    content: "";
+    width: 60px;               /* 内側白丸の直径 */
+    height: 60px;
+    border-radius: 50%;
+    background: #fff;          /* 内側白丸 */
+    display: block;
+}
+
+.toolbar button:active::before {
+    transform: scale(0.95);    /* 押した時に少し縮む */
+}
+
+/* タブコンテナをサムネイルバーの上に固定 */
+#tabSelectorMode {
+    position: fixed;
+    bottom: 110px;              /* サムネイルバーの上に配置 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: rgba(0,0,0,0.4);
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+/* タブボタンのスタイル */
+.tab {
+    padding: 6px 12px;
+    width: 150px;
+    height: 35px;
+    cursor: pointer;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.tab.active {
+    background: #fff;
+    border: 2px solid #007bff;
+    font-weight: bold;
+}
+
+.selector {
+    position: fixed;                /* 画面に固定 */
+    bottom: 20px;                   /* 撮影ボタンの上に配置（調整可） */
+    left: 50%;                      /* 横方向の中央基準 */
+    transform: translateX(-50%);    /* 中央寄せ */
+    display: flex;
+    overflow-x: auto;   /* 横スクロールを有効化 */
+    max-width: 90%;
+    gap: 10px;
+    background: rgba(0,0,0,0.4);
+    padding: 5px;
+    scrollbar-width: thin; /* Firefox用 */
+}
+
+/* 右上に配置するボタン */
+.toggle-btn {
+  position: fixed;
+  bottom: 160px;
+  right: 5%;
+  width: 40px;              /* ボタンの幅 */
+  height: 40px;             /* ボタンの高さ */
+  border-radius: 50%;       /* 丸くする */
+  background: #007bff;      /* 青色背景 */
+  color: white;             /* アイコン色 */
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;            /* 中央寄せ */
+  align-items: center;
+  justify-content: center;
+}
+
+/* サムネイル最小化時は下に移動 */
+#togglePreview.minimized {
+    bottom: 20px;
+}
+
+.selector::-webkit-scrollbar {
+    height: 6px;               /* 横スクロールバーの高さを細めに */
+}
+
+.selector::-webkit-scrollbar-track {
+    background: transparent;    /* 背景は透明で目立たない */
+}
+
+.selector::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.5); /* 半透明の白 */
+    border-radius: 3px;                /* 丸みをつける */
+}
+
+.selector::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.8); /* ホバー時は少し濃く */
+}
+
+/* Firefox用 */
+.selector {
+    scrollbar-width: thin;             /* 細め */
+    scrollbar-color: rgba(255,255,255,0.5) transparent;
+}
+
+.selector img.thumb {
+    flex: 0 0 auto;     /* 横スクロール用に固定幅 */
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border: 2px solid transparent;
+    border-color: #4aa3ff;    /* 枠色 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.selector img.thumb.active {
+    border-color: #ff4a62; /* 選択中の枠色 */
+}
+
+/* 最小化時は非表示 */
+#tabSelectorMode.minimized {
+    display: none;
+}
+
+#selectorPreview.minimized {
+    display: none;
+}
