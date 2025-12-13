@@ -213,14 +213,10 @@ overlayImg.addEventListener("touchmove", (e) => {
     updateTransform();
 });
 
-// canvasのサイズをカメラ映像に合わせて縦3横4の比率に修正
+// canvasのサイズを解像度をvideoと合わせる
 function resizeCanvasTo34() {
-    let w = window.innerWidth;
-    let h = Math.min(window.innerHeight, w * 4 / 3);
-
-    // 解像度を改善
-    w = video.videoWidth;
-    h = video.videoHeight;
+    const w = video.videoWidth;
+    const h = video.videoHeight;
 
     canvas.style.width = w + "px";
     canvas.style.height = h + "px";
@@ -231,9 +227,18 @@ function resizeCanvasTo34() {
 
 // 撮影処理（撮影後すぐ新しいタブで開く）
 captureBtn.addEventListener("click", () => {
+    // videoのサイズを取得しておく(canvasの修正後すぐは取得できないことがある)
+    const cw = video.clientWidth;
+    const ch = video.clientHeight;
+    
     // canvasのサイズをカメラ映像に合わせて縦3横4の比率に修正
     resizeCanvasTo34();
 
+    // カメラの解像度も考慮した倍率
+    const scaleX = video.videoWidth / cw;
+    const scaleY = video.videoHeight / ch;
+
+    // いったんすべてのUIを非表示にする
     hideUI();
 
     // canvasのサイズを取得
@@ -249,34 +254,22 @@ captureBtn.addEventListener("click", () => {
     const defaultY = canvasH * 0.5 - overlayH * 0.5;
 
     // 透過画像の左上の点を計算
-    let overlayX = defaultX + currentPosX;
-    let overlayY = defaultY + currentPosY;
-
-    // 解像度を改善
-    // const maxScale = Math.floor(Math.min(2000 / canvasW, 2000 / canvasH));
-    // canvasW *= maxScale;
-    // canvasH *= maxScale;
-    // overlayX *= maxScale;
-    // overlayY *= maxScale;
-    // overlayW *= maxScale;
-    // overlayH *= maxScale;
-    // console.log(canvasW, canvasH);
+    let overlayX = defaultX + currentPosX * scaleX;
+    let overlayY = defaultY + currentPosY * scaleY;
 
     // カメラ映像(画面に映っているもの)と透過画像をcanvasに描画
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvasW, canvasH);
-    //alert(canvasW, canvasH);
     ctx.drawImage(overlayImg, overlayX, overlayY, overlayW, overlayH);
     console.log(overlayX, overlayY, overlayW, overlayH);
 
-    // PNGとして保存
-    //const url = canvas.toDataURL("image/png");
-
+    // すべてのUIを表示する
     showUI();
       
+    // PNGとして保存
     const url = canvas.toDataURL("image/png");
 
-    // ✅ 別タブを開く（iPhoneでは必ずタブになる）
+    // 別タブを開く（iPhoneでは必ずタブになる）
     const win = window.open("save.html", "_blank");
 
     if (!win) {
@@ -284,17 +277,16 @@ captureBtn.addEventListener("click", () => {
         return;
     }
 
-    // ✅ 別タブが読み込まれるまで少し待つ（iPhone Safari 対策）
+    // 別タブが読み込まれるまで少し待つ（iPhone Safari 対策）
     const sendData = () => {
         win.postMessage(url, "*");
     };
 
-    // ✅ iPhone Safari は load イベントが遅れるので両方使う
+    // iPhone Safari は load イベントが遅れるので両方使う
     win.onload = () => sendData();
 
-    // ✅ 念のため遅延送信（iPhoneで確実に届く）
+    // 念のため遅延送信（iPhoneで確実に届く）
     setTimeout(sendData, 500);
-
 });
 
 // 初期化処理(JSON読み込みを初期描画を同期処理するように注意)
@@ -327,3 +319,4 @@ async function init() {
 
 // 初期化処理(DOMが読み込まれてから)
 document.addEventListener("DOMContentLoaded", init);
+
